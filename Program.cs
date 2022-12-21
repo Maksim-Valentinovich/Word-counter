@@ -641,8 +641,6 @@ namespace New_Structure
         {
             //[Начало программы 001]
 
-            1
-
             Step();
         }
     }
