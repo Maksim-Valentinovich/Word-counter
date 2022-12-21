@@ -1,0 +1,7 @@
+C:\Users\Учебный\Desktop\Программирование\Инорматика\Лаба 1\Word-counter\obj\Debug\Word-counter.csproj.AssemblyReference.cache
+C:\Users\Учебный\Desktop\Программирование\Инорматика\Лаба 1\Word-counter\obj\Debug\Word-counter.csproj.CoreCompileInputs.cache
+C:\Users\Учебный\Desktop\Программирование\Инорматика\Лаба 1\Word-counter\bin\Debug\Word-counter.exe.config
+C:\Users\Учебный\Desktop\Программирование\Инорматика\Лаба 1\Word-counter\bin\Debug\Word-counter.exe
+C:\Users\Учебный\Desktop\Программирование\Инорматика\Лаба 1\Word-counter\bin\Debug\Word-counter.pdb
+C:\Users\Учебный\Desktop\Программирование\Инорматика\Лаба 1\Word-counter\obj\Debug\Word-counter.exe
+C:\Users\Учебный\Desktop\Программирование\Инорматика\Лаба 1\Word-counter\obj\Debug\Word-counter.pdb
