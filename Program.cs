@@ -1,7 +1,7 @@
-﻿using Word_counter.Enums;
-using Word_counter.Enums2;
-using System;
+﻿using System;
 using System.IO;
+using Word_counter.Enums;
+using Word_counter.Enums2;
 
 namespace New_Structure
 {
@@ -81,28 +81,19 @@ namespace New_Structure
             string textlower = text.ToLower();
 
             ///проверка наличия символов впринципе.
-            if (textlower.Length < 2)
-            {
-                Console.WriteLine("Текст не введён или в тексте нет слов!");
 
-                return NextStep.ChooseRepeatOperation;
+            foreach (var item in textlower)
+            {
+                if (item >= 'a' && item <= 'z')
+                    return NextStep.PrintText;
+
+                else
+                    continue;
             }
 
-            else
-            {
-                foreach (var item in textlower)
-                {
-                    if ((item > 'a' && item < 'z') && item != ' ')
-                        return NextStep.PrintText;
+            Console.WriteLine("Неверный текст");
 
-                    else
-                        continue;
-                }
-
-                Console.WriteLine("Неверный текст");
-
-                return NextStep.ChooseRepeatOperation;
-            }
+            return NextStep.ChooseRepeatOperation;
         }
 
         /// Вывод слов на консоль
@@ -120,132 +111,31 @@ namespace New_Structure
 
             string sumbolsPunctuation = ".,:;!?";
 
-            foreach (var item in textLower)
-            {
-                if ((item > 'a' && item < 'z') && item != ' ')
-                {
-                    //startWord = true;
-
-                    Word[numberLetterInlWord] = item;
-
-                    numberLetterInlWord++;
-
-                    //if (item == textLower.Length)
-                    //{
-                    //    count++;
-
-                    //    finishWord = true;
-                    //}
-                }
-
-                else if ((item == '.' || item > 122) && item != ' ')
-                {
-                    foreach (var prov in sumbolsPunctuation)
-                    {
-                        if (prov == item && startWord == true && finishWord == false)
-                        {
-                            Word[numberLetterInlWord] = item;
-
-                            numberLetterInlWord++;
-
-                            count++;
-
-                            finishWord = true;
-                        }
-
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                }
-
-
-                //else if ((item < 97 || item > 122) && item != ' ')
-                //{
-                //    foreach (var prov in sumbolsPunctuation)
-                //    {
-                //        if (prov == item && startWord == true && finishWord == false)
-                //        {
-                //            Word[numberLetterInlWord] = item;
-
-                //            numberLetterInlWord++;
-
-                //            count++;
-
-                //            finishWord = true;
-                //        }
-
-                //        else
-                //        {
-                //            continue;
-                //        }
-                //    }
-                //}
-
-                    /// если символ совпадает с пробелом и начало слова == true
-
-
-                else if (item == ' ' && startWord == true)
-                {
-                    count++;
-
-                    finishWord = true;
-                }
-
-                else
-                {
-                    continue;
-                }
-
-                ///вывод слова на консоль
-                if (startWord && finishWord)
-                {
-                    Console.Write("\nСлово {0}: ", count);
-
-                    for (int a = 0; a < Word.Length; a++)
-                    {
-                        if (Word[a] != '\0')
-                        {
-                            Console.Write(Word[a]);
-
-                            Word[a] = '\0';
-                        }
-
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    numberLetterInlWord = 0;
-
-                    startWord = false;
-
-                    finishWord = false;
-                }
-            }
-
-            //for (int i = 0; i < text.Length; i++)
+            //foreach (var item in textLower)
             //{
-            //    char ch = textLower[i];
-
-            //    int charnum = (int)ch;
-
-            //    ///пропуск первого пробела в тексте
-            //    if ((i == 0 && text[i] == ' ' && text.Length != 1) | (text[i] == ' ' && startWord == false && finishWord == false))
+            //    if ((item > 'a' && item < 'z') && item != ' ')
             //    {
-            //        continue;
+            //        //startWord = true;
+
+            //        Word[numberLetterInlWord] = item;
+
+            //        numberLetterInlWord++;
+
+            //        //if (item == textLower.Length)
+            //        //{
+            //        //    count++;
+
+            //        //    finishWord = true;
+            //        //}
             //    }
 
-            //    ///проверка знаков препинания 
-            //    else if ((charnum < 97 || charnum > 122) && charnum != 32)
+            //    else if ((item == '.' || item > 122) && item != ' ')
             //    {
             //        foreach (var prov in sumbolsPunctuation)
             //        {
-            //            if (prov == ch && startWord == true && finishWord == false)
+            //            if (prov == item && startWord == true && finishWord == false)
             //            {
-            //                Word[numberLetterInlWord] = ch;
+            //                Word[numberLetterInlWord] = item;
 
             //                numberLetterInlWord++;
 
@@ -259,32 +149,44 @@ namespace New_Structure
             //                continue;
             //            }
             //        }
-
             //    }
 
-            //    ///если символ совпадает с пробелом и начало слова == true
-            //    else if (text[i] == ' ' && startWord == true)
+
+            //else if ((item < 97 || item > 122) && item != ' ')
+            //{
+            //    foreach (var prov in sumbolsPunctuation)
             //    {
-            //        count++;
-
-            //        finishWord = true;
-
-            //    }
-
-            //    else
-            //    {
-            //        Word[numberLetterInlWord] = ch;
-
-            //        numberLetterInlWord++;
-
-            //        startWord = true;
-
-            //        if (i == (text.Length - 1))
+            //        if (prov == item && startWord == true && finishWord == false)
             //        {
+            //            Word[numberLetterInlWord] = item;
+
+            //            numberLetterInlWord++;
+
             //            count++;
 
             //            finishWord = true;
             //        }
+
+            //        else
+            //        {
+            //            continue;
+            //        }
+            //    }
+            //}
+
+            /// если символ совпадает с пробелом и начало слова == true
+
+
+            //    else if (item == ' ' && startWord == true)
+            //    {
+            //        count++;
+
+            //        finishWord = true;
+            //    }
+
+            //    else
+            //    {
+            //        continue;
             //    }
 
             //    ///вывод слова на консоль
@@ -300,6 +202,7 @@ namespace New_Structure
 
             //                Word[a] = '\0';
             //            }
+
             //            else
             //            {
             //                break;
@@ -313,6 +216,95 @@ namespace New_Structure
             //        finishWord = false;
             //    }
             //}
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                char ch = textLower[i];
+
+                int charnum = (int)ch;
+
+                ///пропуск первого пробела в тексте
+                if ((i == 0 && text[i] == ' ' && text.Length != 1) | (text[i] == ' ' && startWord == false && finishWord == false))
+                {
+                    continue;
+                }
+
+                ///проверка знаков препинания 
+                else if ((charnum < 97 || charnum > 122) && charnum != 32)
+                {
+                    foreach (var prov in sumbolsPunctuation)
+                    {
+                        if (prov == ch && startWord == true && finishWord == false)
+                        {
+                            Word[numberLetterInlWord] = ch;
+
+                            numberLetterInlWord++;
+
+                            count++;
+
+                            finishWord = true;
+                        }
+
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                }
+
+                ///если символ совпадает с пробелом и начало слова == true
+                else if (text[i] == ' ' && startWord == true)
+                {
+                    count++;
+
+                    finishWord = true;
+
+                }
+
+                else
+                {
+                    Word[numberLetterInlWord] = ch;
+
+                    numberLetterInlWord++;
+
+                    startWord = true;
+
+                    if (i == (text.Length - 1))
+                    {
+                        count++;
+
+                        finishWord = true;
+                    }
+                }
+
+                ///вывод слова на консоль
+                if (startWord && finishWord)
+                {
+                    Console.Write("\nСлово {0}: ", count);
+
+                    for (int a = 0; a < Word.Length; a++)
+                    {
+                        if (Word[a] != '\0')
+                        {
+                            Console.Write(Word[a]);
+
+                            Word[a] = '\0';
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    numberLetterInlWord = 0;
+
+
+                    startWord = false;
+
+                    finishWord = false;
+                }
+            }
             Console.WriteLine("\nКоличество слов в тексте = {0}", count); // вывод сообщения о количестве слов в тексте
 
             return NextStep.ChoiseSaveResult;
