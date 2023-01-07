@@ -27,6 +27,7 @@ namespace New_Structure
                 switch (step)
                 {
                     case NextStep.Start:
+                        PrintIsWork = false;
                         step = Start(ref text);
                         count = 0;
                         break;
@@ -53,19 +54,15 @@ namespace New_Structure
                         break;
 
                     case NextStep.Saving:
-                        step = Saving(ref path, PrintIsWork);
+                        step = Saving(ref path);
                         break;
 
                     case NextStep.ReadFile:
                         step = ReadFile(ref text, ref path);
                         break;
 
-                    case NextStep.CreateFileInputData:
-                        step = CreateFileInputData(path, text);
-                        break;
-
-                    case NextStep.CreateFileResult:
-                        step = CreateFileResult(path, text, count);
+                    case NextStep.CreateFile:
+                        step = CreateFile(path, text, count, PrintIsWork);
                         break;
 
                     case NextStep.Exit:
@@ -85,16 +82,18 @@ namespace New_Structure
 
             foreach (var item in textlower)
             {
-                if (item >= 'a' && item <= 'z')
-                    return NextStep.ChoiseSaveInputData;
+                if (item < 'a' || item > 'z')
+                {
+                    Console.WriteLine("Неверный текст");
+
+                    return NextStep.ChooseRepeatOperation;
+                }
 
                 else
                     continue;
             }
 
-            Console.WriteLine("Неверный текст");
-
-            return NextStep.ChooseRepeatOperation;
+            return NextStep.ChoiseSaveInputData;
         }
 
         /// Вывод слов на консоль
@@ -174,31 +173,34 @@ namespace New_Structure
             return NextStep.ChoiseSaveResult;
         }
 
-        static NextStep CreateFileInputData(string path, string text)
-        {
-            File.WriteAllText(path, text);
-
-            Console.WriteLine("Сохранение успешно!");
-
-            return NextStep.PrintText;
-        }
-
         /// Создание текста при сохраннии результатов
-        static NextStep CreateFileResult(string path, string text, int count)
+        static NextStep CreateFile(string path, string text, int count, bool PrintIsWork)
         {
-            string createText = "Lab1.cpp \nЛабораторная работа № 1 \nИспользование языка С# для математических расчетов " +
-                        "\nВычислить количество слов в нем и распечатать эти слова (по одному в строке) " +
-                        "\nСтудент группы 001, Иванов Максим Валентинович, 2022 год" + "\nТекст: " + text + "\nКоличество слов в тексте = " + count;
+            if (PrintIsWork == true)
+            {
+                string createText = "Lab1.cpp \nЛабораторная работа № 1 \nИспользование языка С# для математических расчетов " +
+                                        "\nВычислить количество слов в нем и распечатать эти слова (по одному в строке) " +
+                                        "\nСтудент группы 001, Иванов Максим Валентинович, 2022 год" + "\nТекст: " + text + "\nКоличество слов в тексте = " + count;
 
-            File.WriteAllText(path, createText);
+                File.WriteAllText(path, createText);
 
-            Console.WriteLine("Сохранение успешно!");
+                Console.WriteLine("Сохранение успешно!");
 
-            return NextStep.ChooseRepeatOperation;
+                return NextStep.ChooseRepeatOperation;
+            }
+
+            else
+            {
+                File.WriteAllText(path, text);
+
+                Console.WriteLine("Сохранение успешно!");
+
+                return NextStep.PrintText;
+            }
         }
 
         /// Сохранение результатов
-        static NextStep Saving(ref string path, bool PrintIsWork)
+        static NextStep Saving(ref string path)
         {
             Console.WriteLine("Введите путь сохранения файла результатов");
 
@@ -206,7 +208,24 @@ namespace New_Structure
 
             try
             {
-                CheckTypeFile(path);
+                CheckFile(path);
+            }
+            catch (FormatException)
+            {
+                return NextStep.Saving;
+            }
+            catch (FileNotFoundException)
+            {
+                return NextStep.CreateFile;
+            }
+
+            Console.WriteLine("Файл уже существует. Выберите действие: \n1-Перезаписать \n2-Указать новое имя файла");
+
+            string Choise = Console.ReadLine();
+
+            try
+            {
+                CheckSelection(Choise);
             }
             catch (Exception ex)
             {
@@ -214,60 +233,23 @@ namespace New_Structure
                 return NextStep.Saving;
             }
 
-            try
-            {
-                CheckExistFile(path);
-            }
-            catch
-            {
-                Console.WriteLine("Файл уже существует. Выберите действие: \n1-Перезаписать \n2-Указать новое имя файла");
+            NewNameFile newnameFile = (NewNameFile)Enum.Parse(typeof(NewNameFile), Choise);
 
-                string Choise = Console.ReadLine();
+            switch (newnameFile)
+            {
+                case NewNameFile.Record:
+                    FileInfo fileSV = new FileInfo(path);
+                    fileSV.Create();
+                    return NextStep.CreateFile;
 
-                try
-                {
-                    CheckSelection(Choise);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
+                case NewNameFile.NewName:
+                    Console.WriteLine("Введите новое имя файла");
                     return NextStep.Saving;
-                }
 
-                NewNameFile newnameFile = (NewNameFile)Enum.Parse(typeof(NewNameFile), Choise);
-
-                switch (newnameFile)
-                {
-                    case NewNameFile.Record:
-                        FileInfo fileSV = new FileInfo(path);
-                        fileSV.Create();
-                        if (PrintIsWork == true)
-                        {
-                            return NextStep.CreateFileResult;
-                        }
-                        else
-                        {
-                            return NextStep.CreateFileInputData;
-                        }
-
-                    case NewNameFile.NewName:
-                        Console.WriteLine("Введите новое имя файла");
-                        return NextStep.Saving;
-
-                    default:
-                        Console.WriteLine("Неверный ввод");
-                        return NextStep.Saving;
-                }
+                default:
+                    Console.WriteLine("Неверный ввод");
+                    return NextStep.Saving;
             }
-            if (PrintIsWork == true)
-            {
-                return NextStep.CreateFileResult;
-            }
-            else
-            {
-                return NextStep.CreateFileInputData;
-            }
-
         }
 
         /// Выбор сохранения исходных данных
@@ -338,8 +320,6 @@ namespace New_Structure
                         Console.WriteLine("Неверный ввод");
                         return NextStep.ChooseRepeatOperation;
                 }
-
-
             }
         }
 
@@ -376,26 +356,25 @@ namespace New_Structure
             }
         }
 
-        static void CheckExistFile(string path)
-        {
-            FileInfo fileInf = new FileInfo(path);
-
-            if (fileInf.Exists != true)
-            {
-                throw new Exception();
-            }
-        }
-
         /// Проверка имени файла 
-        static void CheckTypeFile(string path)
+        static void CheckFile(string path)
         {
             string extension;
+
+            FileInfo fileInf = new FileInfo(path);
 
             extension = Path.GetExtension(path);
 
             if (extension != ".txt")
             {
-                throw new Exception();
+                Console.WriteLine("Тип файла не соответствует требуемому 'txt', \n Повторите ввод!");
+
+                throw new FormatException();
+            }
+
+            if (fileInf.Exists != true)
+            {
+                throw new FileNotFoundException();
             }
         }
 
@@ -408,20 +387,13 @@ namespace New_Structure
 
             try
             {
-                CheckTypeFile(path);
+                CheckFile(path);
             }
-            catch (Exception)
+            catch (FormatException)
             {
-                Console.WriteLine("Тип файла не соответствует требуемому 'txt', \n Повторите ввод!");
-
                 return NextStep.ReadFile;
             }
-
-            try
-            {
-                CheckExistFile(path);
-            }
-            catch (Exception)
+            catch (FileNotFoundException)
             {
                 Console.WriteLine("Файла по указанному пути не существует! \n1-Ввести новое имя файла \n2-Завершить программу");
 

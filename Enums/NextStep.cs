@@ -8,12 +8,11 @@
         PrintText,
         ChooseRepeatOperation,
         ChoiseSaveResult,
-        SavingResult,
-        SavingInputData,
+        Saving,
         WriteFile,
         CheckFile,
         ReadFile,
-        Create,
+        CreateFile,
         Exit
     }
 }
