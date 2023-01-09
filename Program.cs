@@ -80,7 +80,7 @@ namespace New_Structure
 
             ///проверка наличия символов впринципе.
 
-            foreach (var item in textlower)
+            foreach (var item in textlower) // --> Не хватает проверки пунктуации
             {
                 if (item < 'a' || item > 'z')
                 {
@@ -173,7 +173,7 @@ namespace New_Structure
             return NextStep.ChoiseSaveResult;
         }
 
-        /// Создание текста при сохраннии результатов
+        /// Создание текста при сохраннии результатов  // --> Описание странное
         static NextStep CreateFile(string path, string text, int count, bool PrintIsWork)
         {
             if (PrintIsWork == true)
@@ -200,7 +200,7 @@ namespace New_Structure
         }
 
         /// Сохранение результатов
-        static NextStep Saving(ref string path)
+        static NextStep Saving(ref string path)  // --> Это явно надо переписать
         {
             Console.WriteLine("Введите путь сохранения файла результатов");
 
@@ -212,14 +212,14 @@ namespace New_Structure
             }
             catch (FormatException)
             {
-                return NextStep.Saving;
+                return NextStep.Saving;  // --> понятней будет если сразу рекурсивно вызвать этот же метод
             }
             catch (FileNotFoundException)
             {
-                return NextStep.CreateFile;
+                return NextStep.CreateFile;  // --> дальше нигде не предлагается его создать, или ввести другое имя
             }
 
-            Console.WriteLine("Файл уже существует. Выберите действие: \n1-Перезаписать \n2-Указать новое имя файла");
+            Console.WriteLine("Файл уже существует. Выберите действие: \n1-Перезаписать \n2-Указать новое имя файла"); // --> а 
 
             string Choise = Console.ReadLine();
 
@@ -401,7 +401,7 @@ namespace New_Structure
 
                 try
                 {
-                    CheckSelection(Choise);
+                    CheckSelection(Choise);  // --> там нигде не проверяется диапазон для выбора
                 }
                 catch (Exception ex)
                 {
@@ -433,7 +433,7 @@ namespace New_Structure
             return NextStep.CheckText;
         }
 
-        static void CheckSelection(string Choise)
+        static void CheckSelection(string Choise)  // --> что-то лишнее, по названию непонятно зачем
         {
             int NumberChoise = int.Parse(Choise);
         }
@@ -447,11 +447,11 @@ namespace New_Structure
 
             try
             {
-                CheckSelection(Choise);
+                CheckSelection(Choise);  // --> не проверяется диапазон выбора
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message);  // --> такие вещи пользователь не поймёт, это отладочная информация
 
                 return NextStep.Start;
             }
@@ -462,7 +462,7 @@ namespace New_Structure
             {
                 case SourceInputText.ConsoleInput:
 
-                    Console.WriteLine("Введите текст на английском языке");
+                    Console.WriteLine("Введите текст на английском языке"); // --> я бы это вынес отдельно чтобы работало аналогично с файловым вводом в плане цепочки методов, а то тут ты сразу прыгаешь на проверку а ниже только на ввод из файла
 
                     text = Console.ReadLine();
 
