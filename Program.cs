@@ -28,8 +28,12 @@ namespace New_Structure
                 {
                     case NextStep.Start:
                         PrintIsWork = false;
-                        step = Start(ref text);
+                        step = Start();
                         count = 0;
+                        break;
+
+                    case NextStep.WriteText:
+                        step = WriteText(ref text);
                         break;
 
                     case NextStep.CheckText:
@@ -78,21 +82,18 @@ namespace New_Structure
         {
             string textlower = text.ToLower();
 
-            ///проверка наличия символов впринципе.
-
-            foreach (var item in textlower) // --> Не хватает проверки пунктуации
+            foreach (var item in textlower)
             {
-                if (item < 'a' || item > 'z')
+                if ((item < 'a' || item > 'z') && (item != ' ' && item != '.' && item != ',' && item != '!' && item != '?' && item != ';' && item != ':')) // --> делал проверку через foreach дополнительнный
                 {
-                    Console.WriteLine("Неверный текст");
+                        Console.WriteLine("Неверный текст");                                // --> но получислось громоздко и лишний код, решил пока оставить так
 
-                    return NextStep.ChooseRepeatOperation;
+                        return NextStep.ChooseRepeatOperation;
                 }
 
                 else
                     continue;
             }
-
             return NextStep.ChoiseSaveInputData;
         }
 
@@ -106,18 +107,6 @@ namespace New_Structure
             string textlower = text.ToLower();
 
             string sumbolsPunctuation = ".,:;!?";
-
-            // Можно сделать короче, но в таком случае не реализуется весь функционал, который я задумал 
-
-            ///короткая реализация счётчика слов , но она очень глупая, я не понимаю как её развивать дальше
-            //string[] textMass;
-
-            //textMass = text.Split(new char[] {' '});
-
-            //Console.WriteLine("Количество слов:");
-
-            //Console.WriteLine(textMass.Length);
-
 
             foreach (var item in textlower)
             {
@@ -140,7 +129,6 @@ namespace New_Structure
                     }
                 }
 
-                ///если символ совпадает с пробелом и начало слова == true
                 else if (item == ' ' && startWord == true)
                 {
                     finishWord = true;
@@ -223,17 +211,18 @@ namespace New_Structure
 
             string Choise = Console.ReadLine();
 
+            NewNameFile newnameFile;
+
             try
             {
-                CheckSelection(Choise);
+                newnameFile = (NewNameFile)Enum.Parse(typeof(NewNameFile), Choise);
             }
-            catch (Exception ex)
+            catch (ArgumentException)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Неверный ввод");
+
                 return NextStep.Saving;
             }
-
-            NewNameFile newnameFile = (NewNameFile)Enum.Parse(typeof(NewNameFile), Choise);
 
             switch (newnameFile)
             {
@@ -247,7 +236,7 @@ namespace New_Structure
                     return NextStep.Saving;
 
                 default:
-                    Console.WriteLine("Неверный ввод");
+                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
                     return NextStep.Saving;
             }
         }
@@ -259,18 +248,18 @@ namespace New_Structure
 
             string Choise = Console.ReadLine();
 
+            SaveInputData saveInputData;
+
             try
             {
-                CheckSelection(Choise);
+                saveInputData = (SaveInputData)Enum.Parse(typeof(SaveInputData), Choise);
             }
-            catch (Exception ex)
+            catch (ArgumentException)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Неверный ввод!");
 
                 return NextStep.ChoiseSaveInputData;
             }
-
-            SaveInputData saveInputData = (SaveInputData)Enum.Parse(typeof(SaveInputData), Choise);
 
             switch (saveInputData)
             {
@@ -281,7 +270,7 @@ namespace New_Structure
                     return NextStep.PrintText;
 
                 default:
-                    Console.WriteLine("Неверный ввод");
+                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
                     return NextStep.ChoiseSaveInputData;
             }
         }
@@ -295,18 +284,18 @@ namespace New_Structure
 
                 string Choise = Console.ReadLine();
 
+                RepeatOperation repeatoperation;
+
                 try
                 {
-                    CheckSelection(Choise);
+                    repeatoperation = (RepeatOperation)Enum.Parse(typeof(RepeatOperation), Choise);
                 }
-                catch (Exception ex)
+                catch (ArgumentException)
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Неверный ввод!");
 
                     return NextStep.ChooseRepeatOperation;
                 }
-
-                RepeatOperation repeatoperation = (RepeatOperation)Enum.Parse(typeof(RepeatOperation), Choise);
 
                 switch (repeatoperation)
                 {
@@ -317,7 +306,7 @@ namespace New_Structure
                         return NextStep.Exit;
 
                     default:
-                        Console.WriteLine("Неверный ввод");
+                        Console.WriteLine("Выбор не соответствует заданному диапазону!");
                         return NextStep.ChooseRepeatOperation;
                 }
             }
@@ -329,18 +318,19 @@ namespace New_Structure
             Console.WriteLine("Cохранить результаты? \n1 - да \n2 - нет");
 
             string Choise = Console.ReadLine();
+
+            SaveText savethetext;
+
             try
             {
-                CheckSelection(Choise);
+                savethetext = (SaveText)Enum.Parse(typeof(SaveText), Choise);
             }
-            catch (Exception ex)
+            catch (ArgumentException)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Неверный ввод!");
 
                 return NextStep.ChoiseSaveResult;
             }
-
-            SaveText savethetext = (SaveText)Enum.Parse(typeof(SaveText), Choise);
 
             switch (savethetext)
             {
@@ -351,12 +341,12 @@ namespace New_Structure
                     return NextStep.ChooseRepeatOperation;
 
                 default:
-                    Console.WriteLine("Неверный ввод");
+                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
                     return NextStep.ChoiseSaveResult;
             }
         }
 
-        /// Проверка имени файла 
+        /// Проверка файла 
         static void CheckFile(string path)
         {
             string extension;
@@ -376,6 +366,15 @@ namespace New_Structure
             {
                 throw new FileNotFoundException();
             }
+        }
+
+        static NextStep WriteText(ref string text)
+        {
+            Console.WriteLine("Введите текст на английском языке"); 
+
+            text = Console.ReadLine();
+
+            return NextStep.CheckText;
         }
 
         /// Чтение файла
@@ -399,18 +398,18 @@ namespace New_Structure
 
                 string Choise = Console.ReadLine();
 
+                ContinueOperation continueoperation;
+
                 try
                 {
-                    CheckSelection(Choise);  // --> там нигде не проверяется диапазон для выбора
+                    continueoperation = (ContinueOperation)Enum.Parse(typeof(ContinueOperation), Choise);
                 }
-                catch (Exception ex)
+                catch (ArgumentException)
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Неверный ввод!");
 
                     return NextStep.ChooseRepeatOperation;
                 }
-
-                ContinueOperation continueoperation = (ContinueOperation)Enum.Parse(typeof(ContinueOperation), Choise);
 
                 switch (continueoperation)
                 {
@@ -421,7 +420,7 @@ namespace New_Structure
                         return NextStep.Exit;
 
                     default:
-                        Console.WriteLine("Неверный ввод");
+                        Console.WriteLine("Выбор не соответствует заданному диапазону!");
                         return NextStep.ChooseRepeatOperation;
                 }
             }
@@ -433,47 +432,38 @@ namespace New_Structure
             return NextStep.CheckText;
         }
 
-        static void CheckSelection(string Choise)  // --> что-то лишнее, по названию непонятно зачем
-        {
-            int NumberChoise = int.Parse(Choise);
-        }
-
         /// Основное тело программы
-        static NextStep Start(ref string text)
+        static NextStep Start()
         {
             Console.WriteLine("Выберите способ ввода текста: \n1 - Ввод в консоль \n2 - Считывание из файла");
 
             string Choise = Console.ReadLine();
 
+            SourceInputText sourceinputtext;
+
             try
             {
-                CheckSelection(Choise);  // --> не проверяется диапазон выбора
+                 sourceinputtext = (SourceInputText)Enum.Parse(typeof(SourceInputText), Choise);
             }
-            catch (Exception ex)
+            catch (ArgumentException)
             {
-                Console.WriteLine(ex.Message);  // --> такие вещи пользователь не поймёт, это отладочная информация
+                Console.WriteLine("Неверный ввод!"); 
 
                 return NextStep.Start;
             }
-
-            SourceInputText sourceinputtext = (SourceInputText)Enum.Parse(typeof(SourceInputText), Choise);
 
             switch (sourceinputtext)
             {
                 case SourceInputText.ConsoleInput:
 
-                    Console.WriteLine("Введите текст на английском языке"); // --> я бы это вынес отдельно чтобы работало аналогично с файловым вводом в плане цепочки методов, а то тут ты сразу прыгаешь на проверку а ниже только на ввод из файла
-
-                    text = Console.ReadLine();
-
-                    return NextStep.CheckText;
+                    return NextStep.WriteText;
 
                 case SourceInputText.FileInput:
 
                     return NextStep.ReadFile;
 
                 default:
-                    Console.WriteLine("Неверный ввод");
+                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
                     return NextStep.Start;
             }
         }

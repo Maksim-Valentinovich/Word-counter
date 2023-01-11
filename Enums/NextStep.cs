@@ -3,6 +3,7 @@
     enum NextStep
     {
         Start,
+        WriteText,
         ChoiseSaveInputData,
         CheckText,
         PrintText,
