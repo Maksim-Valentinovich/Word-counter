@@ -77,7 +77,11 @@ namespace New_Structure
             }
         }
 
-        /// Проверка текста.
+        /// <summary>
+        /// Проверка корректности текста
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         static NextStep CheckText(string text)
         {
             string textlower = text.ToLower();
@@ -97,7 +101,12 @@ namespace New_Structure
             return NextStep.ChoiseSaveInputData;
         }
 
+        /// <summary>
         /// Вывод слов на консоль
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         static NextStep PrintText(string text, ref int count)
         {
             bool startWord = false;
@@ -161,7 +170,14 @@ namespace New_Structure
             return NextStep.ChoiseSaveResult;
         }
 
-        /// Создание текста при сохраннии результатов  // --> Описание странное
+        /// <summary>
+        /// Создание файла исходных данных либо результатов
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="text"></param>
+        /// <param name="count"></param>
+        /// <param name="PrintIsWork"></param>
+        /// <returns></returns>
         static NextStep CreateFile(string path, string text, int count, bool PrintIsWork)
         {
             if (PrintIsWork == true)
@@ -187,7 +203,11 @@ namespace New_Structure
             }
         }
 
-        /// Сохранение результатов
+        /// <summary>
+        /// Сохранение исходных данных - результатов
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         static NextStep Saving(ref string path)  // --> Это явно надо переписать
         {
             Console.WriteLine("Введите путь сохранения файла результатов");
@@ -200,7 +220,7 @@ namespace New_Structure
             }
             catch (FormatException)
             {
-                return NextStep.Saving;  // --> понятней будет если сразу рекурсивно вызвать этот же метод
+                return Saving(ref path);
             }
             catch (FileNotFoundException)
             {
@@ -241,7 +261,10 @@ namespace New_Structure
             }
         }
 
-        /// Выбор сохранения исходных данных
+        /// <summary>
+        /// Сохраняем исходные данные?
+        /// </summary>
+        /// <returns></returns>
         static NextStep ChoiseSaveInputData()
         {
             Console.WriteLine("Сохранить исходные данный в файл? \n1 - Да \n2 - Нет");
@@ -275,7 +298,10 @@ namespace New_Structure
             }
         }
 
-        /// Выбор повтора операции
+        /// <summary>
+        /// Повторяем операцию?
+        /// </summary>
+        /// <returns></returns>
         static NextStep ChooseRepeatOperation()
         {
             while (true)
@@ -312,7 +338,10 @@ namespace New_Structure
             }
         }
 
-        /// Выбор сохранения результатов
+        /// <summary>
+        /// Сохраняем результаты?
+        /// </summary>
+        /// <returns></returns>
         static NextStep ChoiseSaveResult()
         {
             Console.WriteLine("Cохранить результаты? \n1 - да \n2 - нет");
@@ -346,7 +375,10 @@ namespace New_Structure
             }
         }
 
-        /// Проверка файла 
+        /// <summary>
+        /// Проверка файла
+        /// </summary>
+        /// <param name="path"></param>        
         static void CheckFile(string path)
         {
             string extension;
@@ -368,6 +400,11 @@ namespace New_Structure
             }
         }
 
+        /// <summary>
+        /// Ввод текста с консоли
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         static NextStep WriteText(ref string text)
         {
             Console.WriteLine("Введите текст на английском языке"); 
@@ -377,7 +414,12 @@ namespace New_Structure
             return NextStep.CheckText;
         }
 
+        /// <summary>
         /// Чтение файла
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         static NextStep ReadFile(ref string text, ref string path)
         {
             Console.Write("Введите путь к файлу: ");
@@ -432,7 +474,10 @@ namespace New_Structure
             return NextStep.CheckText;
         }
 
-        /// Основное тело программы
+        /// <summary>
+        /// Выбор характера поступления исходных данных
+        /// </summary>
+        /// <returns></returns>
         static NextStep Start()
         {
             Console.WriteLine("Выберите способ ввода текста: \n1 - Ввод в консоль \n2 - Считывание из файла");
