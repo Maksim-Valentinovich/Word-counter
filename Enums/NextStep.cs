@@ -1,6 +1,6 @@
 ﻿namespace Word_counter.Enums
 {
-    enum NextStep
+    public enum NextStep
     {
         Start,
         WriteText,

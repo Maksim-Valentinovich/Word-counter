@@ -1,7 +1,7 @@
 ﻿
 namespace Word_counter.Enums2
 {
-    enum SaveInputData
+    public enum SaveInputData
     {
         Save = 1,
         NotSave
