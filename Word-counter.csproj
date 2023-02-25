@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassChoising.cs" />
+    <Compile Include="ClassSave.cs" />
+    <Compile Include="ClassWorkText.cs" />
+    <Compile Include="ClassFile.cs" />
     <Compile Include="Enums2\ContinueOperation.cs" />
     <Compile Include="Enums2\NewNameFile.cs" />
     <Compile Include="Enums2\RepeatOperation.cs" />
