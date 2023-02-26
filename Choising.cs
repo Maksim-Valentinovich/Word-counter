@@ -36,7 +36,7 @@ namespace New_Structure
                     return NextStep.Saving;
 
                 case SaveInputData.NotSave:
-                    return NextStep.PrintText;
+                    return NextStep.ChoisePrintText;
 
                 default:
                     Console.WriteLine("Выбор не соответствует заданному диапазону!");
@@ -50,13 +50,13 @@ namespace New_Structure
         /// <returns></returns>
         public NextStep ChoiseSaveResult()
         {
-            Console.WriteLine("Cохранить результаты? \n1 - да \n2 - нет");
+            Console.WriteLine("\nCохранить результаты? \n1 - да \n2 - нет");
 
             string Choise = Console.ReadLine();
 
             SaveText savethetext;
 
-            ///валидация выбора пользователя
+            ///Валидация выбора пользователя
             try
             {
                 savethetext = (SaveText)Enum.Parse(typeof(SaveText), Choise);
@@ -120,5 +120,45 @@ namespace New_Structure
             }
 
         }
+
+        /// <summary>
+        /// Вывод текста на консоль
+        /// </summary>
+        /// <returns></returns>
+        public NextStep ChoisePrintText() 
+        {
+            Console.WriteLine("Вывести слова на консоль? \n1 - да \n2 - нет");
+
+            string Choise = Console.ReadLine();
+
+            PrintText printText;
+
+            ///Валидация выбора пользователя
+            try
+            {
+                printText = (PrintText)Enum.Parse(typeof(PrintText), Choise);
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("Неверный ввод!");
+
+                return NextStep.ChoisePrintText;
+            }
+
+            switch (printText)
+            {
+                case PrintText.Print:
+                    return NextStep.PrintText;
+
+                case PrintText.NoPrint:
+                    return NextStep.ChoiseSaveResult;
+
+                default:
+                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
+                    return NextStep.ChoisePrintText;
+            }
+
+        }
+
     }
 }

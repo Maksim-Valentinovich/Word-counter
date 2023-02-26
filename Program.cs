@@ -41,6 +41,10 @@ namespace New_Structure
                         step = CheckText(text);
                         break;
 
+                    case NextStep.CountWords:
+                        step = CountWords(text, ref count);
+                        break;
+
                     case NextStep.PrintText:
                         PrintIsWork = true;
                         step = PrintText();
@@ -56,6 +60,10 @@ namespace New_Structure
 
                     case NextStep.ChooseRepeatOperation:
                         step = ChooseRepeatOperation();
+                        break;
+
+                    case NextStep.ChoisePrintText:
+                        step = ChoosePrintText();
                         break;
 
                     case NextStep.Saving:
@@ -127,7 +135,7 @@ namespace New_Structure
         /// <returns></returns>
         private NextStep ReadFile(ref string text, ref string path)
         {
-            File file = new File();
+            WorkFile file = new WorkFile();
             return file.ReadFile(ref text, ref path);
         }
 
@@ -168,11 +176,24 @@ namespace New_Structure
             return write.WriteText(ref text);
         }
 
+        /// <summary>
+        /// Проверка совпадения символов текста
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         private NextStep CheckText(string text) 
         {
             ValidateText validate = new ValidateText();
 
             return validate.CheckSymbols(text);
+        }
+
+        private NextStep CountWords(string text, ref int count) 
+        {
+            Estimation estimation = new Estimation();
+
+
+            return estimation.CountWords(text, ref count);
         }
 
         /// <summary>
@@ -231,6 +252,16 @@ namespace New_Structure
         }
 
         /// <summary>
+        /// Печатаем слова из текста? 
+        /// </summary>
+        /// <returns></returns>
+        private NextStep ChoosePrintText() 
+        {
+            Choising choising = new Choising();
+            return choising.ChoisePrintText();
+        }
+
+        /// <summary>
         /// Создание файла исходных данных либо результатов
         /// </summary>
         /// <param name="path"></param>
@@ -240,7 +271,7 @@ namespace New_Structure
         /// <returns></returns>
         private NextStep CreateFile(string path, string text, int count, bool PrintIsWork)
         {
-            NewFile file = new NewFile();
+            MakeNewFile file = new MakeNewFile();
 
             return file.CreateFile(path,text,count,PrintIsWork);
         }
@@ -253,6 +284,7 @@ namespace New_Structure
         {
             Steps steps = new Steps();
             steps.Move(NextStep.Start);
+            Console.ReadLine();
         }
     }
 }

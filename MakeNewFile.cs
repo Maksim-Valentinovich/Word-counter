@@ -5,7 +5,7 @@ using Word_counter.Enums2;
 
 namespace New_Structure
 {
-    class NewFile
+    class MakeNewFile
     {
         /// <summary>
         /// Создание файла исходных данных либо результатов

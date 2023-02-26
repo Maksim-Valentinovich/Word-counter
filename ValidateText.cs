@@ -6,6 +6,7 @@ namespace New_Structure
 {
     class ValidateText
     {
+
         /// <summary>
         /// Проверка корректности текста
         /// </summary>
@@ -25,10 +26,11 @@ namespace New_Structure
                 }
 
                 else
+
                     continue;
             }
 
-            return NextStep.ChoiseSaveInputData;
+            return NextStep.CountWords;
         }
     }
 }

@@ -3,14 +3,8 @@ using Word_counter.Enums;
 
 namespace New_Structure
 {
-    class CountWords
+    class Estimation
     {
-        private int count;
-
-        public CountWords(ref int count)
-        {
-            this.count = count;
-        }
 
         /// <summary>
         /// Вывод слов на консоль
@@ -18,7 +12,7 @@ namespace New_Structure
         /// <param name="text"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public NextStep Estimation(string text, ref int count)
+        public NextStep CountWords(string text, ref int count)
         {
             bool startWord = false;
 
@@ -36,7 +30,6 @@ namespace New_Structure
                     {
                         if (prov == item && startWord == true && finishWord == false)
                         {
-                            Console.Write(item);
 
                             finishWord = true;
 
@@ -60,15 +53,11 @@ namespace New_Structure
                     if (startWord == false)
                     {
                         count++;
-
-                        Console.Write("\nСлово {0}: ", count);
                     }
 
                     startWord = true;
 
                     finishWord = false;
-
-                    Console.Write(item);
                 }
 
                 else
@@ -77,7 +66,7 @@ namespace New_Structure
 
             Console.WriteLine("\nКоличество слов в тексте = {0}", count);
            
-            return NextStep.ChoiseSaveResult;
+            return NextStep.ChoiseSaveInputData;
         }
     }
 }

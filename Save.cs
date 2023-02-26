@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Web;
 using Word_counter.Enums;
 using Word_counter.Enums2;
 
@@ -14,7 +15,7 @@ namespace New_Structure
         /// <returns></returns>
         public NextStep Saving(ref string path)  // --> Это явно надо переписать
         {
-            Console.WriteLine("Введите путь сохранения файла");
+            Console.WriteLine("Введите путь сохранения файла и его имя");
 
             path = Console.ReadLine();
 
@@ -66,5 +67,27 @@ namespace New_Structure
                     return NextStep.Saving;
             }
         }
+
+        //private bool PathFile(string path)
+        //{
+        //    Console.WriteLine("Введите путь сохранения файла");
+
+        //    path = Console.ReadLine();
+
+        //    ///Валидация формата 'txt' в имени файла и его существования в указанном месте
+        //    try
+        //    {
+        //        WorkFile checkTxt = new WorkFile();
+        //        checkTxt.CheckFile(path);
+        //    }
+        //    catch (FormatException)
+        //    {
+        //        return NextStep.Saving;
+        //    }
+        //    catch (FileNotFoundException)
+        //    {
+        //        return NextStep.CreateFile;  // --> дальше нигде не предлагается его создать, или ввести другое имя
+        //    }
+        //}
     }
 }
