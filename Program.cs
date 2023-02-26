@@ -140,31 +140,6 @@ namespace New_Structure
         }
 
         /// <summary>
-        /// Проверка файла
-        /// </summary>
-        /// <param name="path"></param>    
-        private void CheckFile(string path)
-        {
-            string extension;
-
-            FileInfo fileInf = new FileInfo(path);
-
-            extension = Path.GetExtension(path);
-
-            if (extension != ".txt")
-            {
-                Console.WriteLine("Тип файла не соответствует требуемому 'txt', \n Повторите ввод!");
-
-                throw new FormatException();
-            }
-
-            if (fileInf.Exists != true)
-            {
-                throw new FileNotFoundException();
-            }
-        }
-
-        /// <summary>
         /// Ввод текста с консоли
         /// </summary>
         /// <param name="text"></param>
