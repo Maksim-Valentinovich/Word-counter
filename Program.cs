@@ -34,7 +34,11 @@ namespace New_Structure
                         break;
 
                     case NextStep.WriteText:
-                        step = WriteText(ref text, ref count);
+                        step = WriteText(ref text);
+                        break;
+
+                    case NextStep.CheckText:
+                        step = CheckText(text);
                         break;
 
                     case NextStep.PrintText:
@@ -51,7 +55,7 @@ namespace New_Structure
                         break;
 
                     case NextStep.ChooseRepeatOperation:
-                        step = Choise();
+                        step = ChooseRepeatOperation();
                         break;
 
                     case NextStep.Saving:
@@ -87,6 +91,7 @@ namespace New_Structure
 
             SourceInputText sourceinputtext;
 
+            /// Валидация выбора пользователя 
             try
             {
                 sourceinputtext = (SourceInputText)Enum.Parse(typeof(SourceInputText), Choise);
@@ -156,13 +161,18 @@ namespace New_Structure
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private NextStep WriteText(ref string text, ref int count)
+        private NextStep WriteText(ref string text)
         {
-            Console.WriteLine("Введите текст на английском языке");
+            WriteInputText write = new WriteInputText();
 
-            text = Console.ReadLine();
+            return write.WriteText(ref text);
+        }
 
-            return NextStep.PrintText;
+        private NextStep CheckText(string text) 
+        {
+            ValidateText validate = new ValidateText();
+
+            return validate.CheckSymbols(text);
         }
 
         /// <summary>
@@ -173,9 +183,9 @@ namespace New_Structure
         /// <returns></returns>
         private NextStep PrintText()
         {
-            WorkText workText = new WorkText(ref count);
+            Print print = new Print();
 
-            return workText.CheckText(text);
+            return print.PrintTextOnConsole(text, ref count);
         }
 
         /// <summary>
@@ -183,57 +193,11 @@ namespace New_Structure
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private NextStep Saving(ref string path)  // --> Это явно надо переписать
+        private NextStep Saving(ref string path)
         {
-            Console.WriteLine("Введите путь сохранения файла результатов");
+            Save save = new Save();
 
-            path = Console.ReadLine();
-
-            try
-            {
-                CheckFile(path);
-            }
-            catch (FormatException)
-            {
-                return Saving(ref path);
-            }
-            catch (FileNotFoundException)
-            {
-                return NextStep.CreateFile;  // --> дальше нигде не предлагается его создать, или ввести другое имя
-            }
-
-            Console.WriteLine("Файл уже существует. Выберите действие: \n1-Перезаписать \n2-Указать новое имя файла"); // --> а 
-
-            string Choise = Console.ReadLine();
-
-            NewNameFile newnameFile;
-
-            try
-            {
-                newnameFile = (NewNameFile)Enum.Parse(typeof(NewNameFile), Choise);
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("Неверный ввод");
-
-                return NextStep.Saving;
-            }
-
-            switch (newnameFile)
-            {
-                case NewNameFile.Record:
-                    FileInfo fileSV = new FileInfo(path);
-                    fileSV.Create();
-                    return NextStep.CreateFile;
-
-                case NewNameFile.NewName:
-                    Console.WriteLine("Введите новое имя файла");
-                    return NextStep.Saving;
-
-                default:
-                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
-                    return NextStep.Saving;
-            }
+            return save.Saving(ref path);
         }
 
         /// <summary>
@@ -242,35 +206,8 @@ namespace New_Structure
         /// <returns></returns>
         private NextStep ChoiseSaveInputData()
         {
-            Console.WriteLine("Сохранить исходные данный в файл? \n1 - Да \n2 - Нет");
-
-            string Choise = Console.ReadLine();
-
-            SaveInputData saveInputData;
-
-            try
-            {
-                saveInputData = (SaveInputData)Enum.Parse(typeof(SaveInputData), Choise);
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("Неверный ввод!");
-
-                return NextStep.ChoiseSaveInputData;
-            }
-
-            switch (saveInputData)
-            {
-                case SaveInputData.Save:
-                    return NextStep.Saving;
-
-                case SaveInputData.NotSave:
-                    return NextStep.PrintText;
-
-                default:
-                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
-                    return NextStep.ChoiseSaveInputData;
-            }
+            Choising choising = new Choising();
+            return choising.ChoiseSaveInputData();
         }
 
         /// <summary>
@@ -279,45 +216,18 @@ namespace New_Structure
         /// <returns></returns>
         private NextStep ChoiseSaveResult()
         {
-            Console.WriteLine("Cохранить результаты? \n1 - да \n2 - нет");
-
-            string Choise = Console.ReadLine();
-
-            SaveText savethetext;
-
-            try
-            {
-                savethetext = (SaveText)Enum.Parse(typeof(SaveText), Choise);
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("Неверный ввод!");
-
-                return NextStep.ChoiseSaveResult;
-            }
-
-            switch (savethetext)
-            {
-                case SaveText.saveText:
-                    return NextStep.Saving;
-
-                case SaveText.ChooseRepeatOperation:
-                    return NextStep.ChooseRepeatOperation;
-
-                default:
-                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
-                    return NextStep.ChoiseSaveResult;
-            }
+            Choising choising = new Choising();
+            return choising.ChoiseSaveResult();
         }
 
         /// <summary>
         /// Повторяем операцию?
         /// </summary>
         /// <returns></returns>
-        private NextStep Choise()
+        private NextStep ChooseRepeatOperation()
         {
             Choising choising = new Choising();
-            return NextStep.Start; /// изменить!!!
+            return choising.ChooseRepeatOperation();
         }
 
         /// <summary>
@@ -330,27 +240,9 @@ namespace New_Structure
         /// <returns></returns>
         private NextStep CreateFile(string path, string text, int count, bool PrintIsWork)
         {
-            if (PrintIsWork == true)
-            {
-                string createText = "Lab1.cpp \nЛабораторная работа № 1 \nИспользование языка С# для математических расчетов " +
-                                        "\nВычислить количество слов в нем и распечатать эти слова (по одному в строке) " +
-                                        "\nСтудент группы 001, Иванов Максим Валентинович, 2022 год" + "\nТекст: " + text + "\nКоличество слов в тексте = " + count;
+            NewFile file = new NewFile();
 
-                //File.WriteAllText(path, createText);
-
-                Console.WriteLine("Сохранение успешно!");
-
-                return NextStep.ChooseRepeatOperation;
-            }
-
-            else
-            {
-                //File.WriteAllText(path, text);
-
-                Console.WriteLine("Сохранение успешно!");
-
-                return NextStep.PrintText;
-            }
+            return file.CreateFile(path,text,count,PrintIsWork);
         }
 
     }

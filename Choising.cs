@@ -18,6 +18,7 @@ namespace New_Structure
 
             SaveInputData saveInputData;
 
+            ///Валидация выбора пользователя
             try
             {
                 saveInputData = (SaveInputData)Enum.Parse(typeof(SaveInputData), Choise);
@@ -55,6 +56,7 @@ namespace New_Structure
 
             SaveText savethetext;
 
+            ///валидация выбора пользователя
             try
             {
                 savethetext = (SaveText)Enum.Parse(typeof(SaveText), Choise);
@@ -63,35 +65,20 @@ namespace New_Structure
             {
                 Console.WriteLine("Неверный ввод!");
 
-                Choising choising = new Choising();
-
-                return choising.ChoiseSaveResult();
-
-                //return NextStep.ChoiseSaveResult;
+                return NextStep.ChoiseSaveResult;
             }
 
             switch (savethetext)
             {
                 case SaveText.saveText:
-
                     return NextStep.Saving;
 
                 case SaveText.ChooseRepeatOperation:
-
-                    Choising choising1 = new Choising();
-
-                    return choising1.ChooseRepeatOperation();
-
-                //return NextStep.ChooseRepeatOperation;
+                    return NextStep.ChooseRepeatOperation;
 
                 default:
                     Console.WriteLine("Выбор не соответствует заданному диапазону!");
-
-                    Choising choising2 = new Choising();
-
-                    return choising2.ChoiseSaveResult();
-
-                    //return NextStep.ChoiseSaveResult;
+                    return NextStep.ChoiseSaveResult;
             }
         }
 
@@ -107,7 +94,7 @@ namespace New_Structure
 
             RepeatOperation repeatoperation;
 
-            ///Проверка адекватности выбора пользователя
+            ///Валидация выбора пользователя
             try
             {
                 repeatoperation = (RepeatOperation)Enum.Parse(typeof(RepeatOperation), Choise);
@@ -116,9 +103,7 @@ namespace New_Structure
             {
                 Console.WriteLine("Неверный ввод!");
 
-                Choising choising1 = new Choising();
-
-                return choising1.ChooseRepeatOperation();
+                return NextStep.ChooseRepeatOperation;
             }
 
             switch (repeatoperation)
@@ -131,12 +116,7 @@ namespace New_Structure
 
                 default:
                     Console.WriteLine("Выбор не соответствует заданному диапазону!");
-
-                    Choising choising = new Choising();
-
-                    return choising.ChooseRepeatOperation();
-
-                    //return NextStep.ChooseRepeatOperation;
+                    return NextStep.ChooseRepeatOperation;
             }
 
         }

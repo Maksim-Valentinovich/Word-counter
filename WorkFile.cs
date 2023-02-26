@@ -5,7 +5,7 @@ using Word_counter.Enums2;
 
 namespace New_Structure
 {
-    class File
+    class WorkFile
     {
         /// <summary>
         /// Проверка файла
@@ -50,11 +50,7 @@ namespace New_Structure
             }
             catch (FormatException)
             {
-                File file = new File();
-
-                file.ReadFile(ref text, ref path);
-
-                //return NextStep.ReadFile;
+                return NextStep.ReadFile;
             }
             catch (FileNotFoundException)
             {
@@ -73,46 +69,28 @@ namespace New_Structure
                 {
                     Console.WriteLine("Неверный ввод!");
 
-                    Choising choising = new Choising();
-                    
-                    return choising.ChooseRepeatOperation();
-
-                    //return NextStep.ChooseRepeatOperation;
+                    return NextStep.ChooseRepeatOperation;
                 }
 
                 switch (continueoperation)
                 {
                     case ContinueOperation.WriteNewFileName:
-
-                        File file = new File();
-
-                        return file.ReadFile(ref text, ref path);
-
-                        //return NextStep.ReadFile;
+                        return NextStep.ReadFile;
 
                     case ContinueOperation.Exit:
                         return NextStep.Exit;
 
                     default:
                         Console.WriteLine("Выбор не соответствует заданному диапазону!");
-                        
-                        Choising choising = new Choising();
-
-                        return choising.ChooseRepeatOperation();
-
-                        //return NextStep.ChooseRepeatOperation;
+                        return NextStep.ChooseRepeatOperation;
                 }
             }
 
-            //text = File.ReadAllText(path);
+            text = File.ReadAllText(path);
 
             Console.WriteLine(text);
 
-            WorkText workText = new WorkText(ref count);
-
-            return workText.CheckText(text);
-
-            //return NextStep.CheckText;
+            return NextStep.CheckText;
         }
     }
 }
