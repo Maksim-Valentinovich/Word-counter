@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Choising.cs" />
+    <Compile Include="StartWordCounter.cs" />
     <Compile Include="Enums2\PrintText.cs" />
     <Compile Include="MakeNewFile.cs" />
     <Compile Include="WriteInputText.cs" />

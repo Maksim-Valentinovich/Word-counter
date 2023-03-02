@@ -7,13 +7,15 @@ namespace New_Structure
 {
     class WriteInputText
     {
-        public NextStep WriteText(ref string text)
+        public string WriteText()
         {
             Console.WriteLine("Введите текст на английском языке");
 
-            text = Console.ReadLine();
+            string text = Console.ReadLine();
 
-            return NextStep.CheckText;
+            return text;
+
+            //return NextStep.CheckText;
         }
     }
 }

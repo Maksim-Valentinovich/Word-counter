@@ -12,7 +12,7 @@ namespace New_Structure
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public NextStep CheckSymbols(string text)
+        public bool CheckSymbols(string text)
         {
             string textlower = text.ToLower();
 
@@ -20,17 +20,12 @@ namespace New_Structure
             {
                 if ((item < 'a' || item > 'z') && (item != ' ' && item != '.' && item != ',' && item != '!' && item != '?' && item != ';' && item != ':'))
                 {
-                    Console.WriteLine("Неверный текст");
-
-                    return NextStep.ChooseRepeatOperation;
+                    return false;
                 }
-
                 else
-
                     continue;
             }
-
-            return NextStep.CountWords;
+            return true;
         }
     }
 }

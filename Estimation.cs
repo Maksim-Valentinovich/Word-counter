@@ -12,7 +12,7 @@ namespace New_Structure
         /// <param name="text"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public NextStep CountWords(string text, ref int count)
+        public int CountWords(string text, ref int count)
         {
             bool startWord = false;
 
@@ -64,9 +64,11 @@ namespace New_Structure
                     continue;
             }
 
-            Console.WriteLine("\nКоличество слов в тексте = {0}", count);
+            //Console.WriteLine("\nКоличество слов в тексте = {0}", count);
+
+            return count;
            
-            return NextStep.ChoiseSaveInputData;
+            //return NextStep.ChoiseSaveInputData;
         }
     }
 }

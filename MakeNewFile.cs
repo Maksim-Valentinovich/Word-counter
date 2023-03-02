@@ -36,7 +36,7 @@ namespace New_Structure
 
                 Console.WriteLine("Сохранение успешно!");
 
-                return NextStep.PrintText;
+                return NextStep.ChoisePrintText;
             }
         }
     }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
+using Word_counter;
 using Word_counter.Enums;
 using Word_counter.Enums2;
 
@@ -84,7 +86,6 @@ namespace New_Structure
                         return;
                 }
             }
-
         }
 
         /// <summary>
@@ -93,38 +94,8 @@ namespace New_Structure
         /// <returns></returns>
         private NextStep Start()
         {
-            Console.WriteLine("Выберите способ ввода текста: \n1 - Ввод в консоль \n2 - Считывание из файла");
-
-            string Choise = Console.ReadLine();
-
-            SourceInputText sourceinputtext;
-
-            /// Валидация выбора пользователя 
-            try
-            {
-                sourceinputtext = (SourceInputText)Enum.Parse(typeof(SourceInputText), Choise);
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("Неверный ввод!");
-
-                return NextStep.Start;
-            }
-
-            switch (sourceinputtext)
-            {
-                case SourceInputText.ConsoleInput:
-
-                    return NextStep.WriteText;
-
-                case SourceInputText.FileInput:
-
-                    return NextStep.ReadFile;
-
-                default:
-                    Console.WriteLine("Выбор не соответствует заданному диапазону!");
-                    return NextStep.Start;
-            }
+            StartWordCounter start = new StartWordCounter();
+            return start.Start();
         }
 
         /// <summary>
@@ -148,7 +119,9 @@ namespace New_Structure
         {
             WriteInputText write = new WriteInputText();
 
-            return write.WriteText(ref text);
+            text = write.WriteText();
+
+            return NextStep.CheckText;
         }
 
         /// <summary>
@@ -160,15 +133,29 @@ namespace New_Structure
         {
             ValidateText validate = new ValidateText();
 
-            return validate.CheckSymbols(text);
-        }
+            if (validate.CheckSymbols(text)) 
+            {
+                return NextStep.CountWords;
+            }
 
+            Console.WriteLine("Неверный текст!");
+
+            return NextStep.ChooseRepeatOperation;
+        }
+        
+        /// <summary>
+        /// Подсчёт количества слов
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         private NextStep CountWords(string text, ref int count) 
         {
             Estimation estimation = new Estimation();
 
+            Console.WriteLine("\nКоличество слов в тексте = {0}", estimation.CountWords(text, ref count));
 
-            return estimation.CountWords(text, ref count);
+            return NextStep.ChoisePrintText;
         }
 
         /// <summary>
@@ -181,7 +168,11 @@ namespace New_Structure
         {
             Print print = new Print();
 
-            return print.PrintTextOnConsole(text, ref count);
+            if (print.PrintTextOnConsole(text, ref count))
+            {
+                return NextStep.ChoiseSaveResult;
+            }
+            return NextStep.ChooseRepeatOperation;
         }
 
         /// <summary>

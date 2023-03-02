@@ -89,5 +89,10 @@ namespace New_Structure
         //        return NextStep.CreateFile;  // --> дальше нигде не предлагается его создать, или ввести другое имя
         //    }
         //}
+
+        //private bool FileName() 
+        //{
+
+        //}
     }
 }

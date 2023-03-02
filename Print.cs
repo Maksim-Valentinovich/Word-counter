@@ -12,7 +12,7 @@ namespace New_Structure
         /// <param name="text"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public NextStep PrintTextOnConsole(string text, ref int count)
+        public bool PrintTextOnConsole(string text, ref int count)
         {
             bool startWord = false;
 
@@ -76,7 +76,9 @@ namespace New_Structure
                     continue;
             }
 
-            return NextStep.ChoiseSaveResult;
+            return true;
+
+            //return NextStep.ChoiseSaveResult;
         }
        
     }
