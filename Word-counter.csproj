@@ -44,15 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Choising.cs" />
+    <Compile Include="ValidateText.cs" />
     <Compile Include="StartWordCounter.cs" />
     <Compile Include="Enums2\PrintText.cs" />
-    <Compile Include="MakeNewFile.cs" />
     <Compile Include="WriteInputText.cs" />
-    <Compile Include="ValidateText.cs" />
     <Compile Include="Print.cs" />
-    <Compile Include="Save.cs" />
     <Compile Include="Estimation.cs" />
-    <Compile Include="WorkFile.cs" />
+    <Compile Include="ActionsFile.cs" />
     <Compile Include="Enums2\ContinueOperation.cs" />
     <Compile Include="Enums2\NewNameFile.cs" />
     <Compile Include="Enums2\RepeatOperation.cs" />

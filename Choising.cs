@@ -74,7 +74,7 @@ namespace New_Structure
                     return NextStep.Saving;
 
                 case SaveText.ChooseRepeatOperation:
-                    return NextStep.ChooseRepeatOperation;
+                    return NextStep.ChoiseRepeatOperation;
 
                 default:
                     Console.WriteLine("Выбор не соответствует заданному диапазону!");
@@ -103,7 +103,7 @@ namespace New_Structure
             {
                 Console.WriteLine("Неверный ввод!");
 
-                return NextStep.ChooseRepeatOperation;
+                return NextStep.ChoiseRepeatOperation;
             }
 
             switch (repeatoperation)
@@ -116,7 +116,7 @@ namespace New_Structure
 
                 default:
                     Console.WriteLine("Выбор не соответствует заданному диапазону!");
-                    return NextStep.ChooseRepeatOperation;
+                    return NextStep.ChoiseRepeatOperation;
             }
 
         }

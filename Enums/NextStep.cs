@@ -8,7 +8,7 @@
         CheckText,
         PrintText,
         CountWords,
-        ChooseRepeatOperation,
+        ChoiseRepeatOperation,
         ChoiseSaveResult,
         ChoisePrintText,
         Saving,

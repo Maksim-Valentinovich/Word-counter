@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Word_counter.Enums;
 using Word_counter.Enums2;
 
 namespace New_Structure
 {
-    class ValidateText
+    public class ValidateText
     {
 
         /// <summary>
@@ -16,16 +17,29 @@ namespace New_Structure
         {
             string textlower = text.ToLower();
 
-            foreach (var item in textlower)
+            int countOfLetter = 0;
+
+            char[] symbolsPunctuation = { '!', '.', ',', '?', ':', ';', ' ' };
+
+            if (textlower.Length == 0) return false;
+
+            foreach (var symbol in textlower)
             {
-                if ((item < 'a' || item > 'z') && (item != ' ' && item != '.' && item != ',' && item != '!' && item != '?' && item != ';' && item != ':'))
+                if (symbol < 'a' || symbol > 'z')
                 {
-                    return false;
+                    if (symbolsPunctuation.Contains(symbol))
+                        continue;
+                   
+                    else return false;
                 }
                 else
+                    countOfLetter++;
                     continue;
             }
-            return true;
+
+            if (countOfLetter != 0) return true;
+
+            return false;
         }
     }
 }

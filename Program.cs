@@ -36,15 +36,15 @@ namespace New_Structure
                         break;
 
                     case NextStep.WriteText:
-                        step = WriteText(ref text);
+                        step = WriteText();
                         break;
 
                     case NextStep.CheckText:
-                        step = CheckText(text);
+                        step = CheckText();
                         break;
 
                     case NextStep.CountWords:
-                        step = CountWords(text, ref count);
+                        step = CountWords();
                         break;
 
                     case NextStep.PrintText:
@@ -60,8 +60,8 @@ namespace New_Structure
                         step = ChoiseSaveInputData();
                         break;
 
-                    case NextStep.ChooseRepeatOperation:
-                        step = ChooseRepeatOperation();
+                    case NextStep.ChoiseRepeatOperation:
+                        step = ChoiseRepeatOperation();
                         break;
 
                     case NextStep.ChoisePrintText:
@@ -69,15 +69,15 @@ namespace New_Structure
                         break;
 
                     case NextStep.Saving:
-                        step = Saving(ref path);
+                        step = Saving();
                         break;
 
                     case NextStep.ReadFile:
-                        step = ReadFile(ref text, ref path);
+                        step = ReadFile();
                         break;
 
                     case NextStep.CreateFile:
-                        step = CreateFile(path, text, count, PrintIsWork);
+                        step = CreateFile();
                         break;
 
                     case NextStep.Exit:
@@ -104,10 +104,67 @@ namespace New_Structure
         /// <param name="text"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        private NextStep ReadFile(ref string text, ref string path)
+        private NextStep ReadFile()
         {
-            WorkFile file = new WorkFile();
-            return file.ReadFile(ref text, ref path);
+            ActionsFile actions = new ActionsFile();
+
+            while (true)
+            {
+                Console.Write("Введите путь к файлу: ");
+
+                path = Console.ReadLine();
+
+                try
+                {
+                    actions.CheckFile(path);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Тип файла не соответствует требуемому 'txt', \n Повторите ввод!");
+
+                    break;
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("Файла по указанному пути не существует! \n1-Ввести новое имя файла \n2-Завершить программу");
+
+                    string Choise = Console.ReadLine();
+
+                    ContinueOperation continueoperation;
+
+                    /// Валидация выбора пользователя
+                    try
+                    {
+                        continueoperation = (ContinueOperation)Enum.Parse(typeof(ContinueOperation), Choise);
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Неверный ввод!");
+
+                        return NextStep.ChoiseRepeatOperation;
+                    }
+
+                    switch (continueoperation)
+                    {
+                        case ContinueOperation.WriteNewFileName:
+                            break;
+
+                        case ContinueOperation.Exit:
+                            return NextStep.Exit;
+
+                        default:
+                            Console.WriteLine("Выбор не соответствует заданному диапазону!");
+                            return NextStep.ChoiseRepeatOperation;
+                    }
+                }
+            }
+
+            if (actions.ReadFile(ref text, path))
+            {
+                Console.WriteLine(text);
+            }
+
+            return NextStep.CheckText;
         }
 
         /// <summary>
@@ -115,7 +172,7 @@ namespace New_Structure
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private NextStep WriteText(ref string text)
+        private NextStep WriteText()
         {
             WriteInputText write = new WriteInputText();
 
@@ -129,7 +186,7 @@ namespace New_Structure
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private NextStep CheckText(string text) 
+        private NextStep CheckText() 
         {
             ValidateText validate = new ValidateText();
 
@@ -140,7 +197,7 @@ namespace New_Structure
 
             Console.WriteLine("Неверный текст!");
 
-            return NextStep.ChooseRepeatOperation;
+            return NextStep.ChoiseRepeatOperation;
         }
         
         /// <summary>
@@ -149,11 +206,11 @@ namespace New_Structure
         /// <param name="text"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        private NextStep CountWords(string text, ref int count) 
+        private NextStep CountWords() 
         {
             Estimation estimation = new Estimation();
 
-            Console.WriteLine("\nКоличество слов в тексте = {0}", estimation.CountWords(text, ref count));
+            Console.WriteLine("\nКоличество слов в тексте = {0}", estimation.CountWords(text));
 
             return NextStep.ChoisePrintText;
         }
@@ -168,11 +225,11 @@ namespace New_Structure
         {
             Print print = new Print();
 
-            if (print.PrintTextOnConsole(text, ref count))
+            if (print.PrintTextOnConsole(text))
             {
                 return NextStep.ChoiseSaveResult;
             }
-            return NextStep.ChooseRepeatOperation;
+            return NextStep.ChoiseRepeatOperation;
         }
 
         /// <summary>
@@ -180,11 +237,69 @@ namespace New_Structure
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private NextStep Saving(ref string path)
+        private NextStep Saving()
         {
-            Save save = new Save();
+            ActionsFile actions = new ActionsFile();
 
-            return save.Saving(ref path);
+            while (true)
+            {
+                Console.WriteLine("Введите путь сохранения файла и его имя");
+
+                path = Console.ReadLine();
+
+                ///Валидация формата 'txt' в имени файла и его существования в указанном месте
+                try
+                {
+                    actions.CheckFile(path);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Тип файла не соответствует требуемому 'txt', \n Повторите ввод!");
+
+                    break;
+                }
+                catch (FileNotFoundException)
+                {
+                    return NextStep.CreateFile;
+                }
+
+                Console.WriteLine("Файл уже существует. Выберите действие: \n1-Перезаписать \n2-Указать новое имя файла");
+
+                string Choise = Console.ReadLine();
+
+                NewNameFile newNameFile;
+
+                ///Валидация выбора пользователя
+                try
+                {
+                    newNameFile = (NewNameFile)Enum.Parse(typeof(NewNameFile), Choise);
+                }
+                catch (ArgumentException)
+                {
+                    Console.WriteLine("Неверный ввод");
+
+                    break;
+                }
+
+                switch (newNameFile)
+                {
+                    case NewNameFile.Record:
+                        if (actions.RecordFile(path))
+                        {
+                            return NextStep.CreateFile;
+                        }
+                        break;
+
+                    case NewNameFile.NewName:
+                        Console.WriteLine("Введите новое имя файла");
+                        break;
+
+                    default:
+                        Console.WriteLine("Выбор не соответствует заданному диапазону!");
+                        break;
+                }
+            }
+            return NextStep.ChoiseRepeatOperation;
         }
 
         /// <summary>
@@ -211,7 +326,7 @@ namespace New_Structure
         /// Повторяем операцию?
         /// </summary>
         /// <returns></returns>
-        private NextStep ChooseRepeatOperation()
+        private NextStep ChoiseRepeatOperation()
         {
             Choising choising = new Choising();
             return choising.ChooseRepeatOperation();
@@ -235,13 +350,27 @@ namespace New_Structure
         /// <param name="count"></param>
         /// <param name="PrintIsWork"></param>
         /// <returns></returns>
-        private NextStep CreateFile(string path, string text, int count, bool PrintIsWork)
+        private NextStep CreateFile()
         {
-            MakeNewFile file = new MakeNewFile();
+            ActionsFile actions = new ActionsFile();
 
-            return file.CreateFile(path,text,count,PrintIsWork);
+            if (PrintIsWork)
+            {
+                actions.CreateFileResult(path, text, count);
+
+                Console.WriteLine("Сохранение успешно!");
+
+                return NextStep.ChoiseRepeatOperation;
+            }
+            else
+            {
+                actions.CreateFileInputData(path, text);
+
+                Console.WriteLine("Сохранение успешно!");
+
+                return NextStep.ChoisePrintText;
+            }
         }
-
     }
 
     class Program

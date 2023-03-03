@@ -1,9 +1,8 @@
 ﻿using System;
-using Word_counter.Enums;
-using Word_counter.Enums2;
+using System.Linq;
 
 namespace New_Structure
-{ 
+{
     class Print
     {
         /// <summary>
@@ -12,7 +11,7 @@ namespace New_Structure
         /// <param name="text"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public bool PrintTextOnConsole(string text, ref int count)
+        public bool PrintTextOnConsole(string text)
         {
             bool startWord = false;
 
@@ -20,66 +19,45 @@ namespace New_Structure
 
             string textlower = text.ToLower();
 
-            string sumbolsPunctuation = ".,:;!?";
+            char[] symbolsPunctuation = { '!', '.', ',', '?', ':', ';', ' ' };
 
-            foreach (var item in textlower)
+            int count = 0;
+
+            foreach (var symbol in textlower)
             {
-                if ((item < 'a' || item > 'z') && item != ' ')
+                if (symbol >= 'a' && symbol <= 'z')
                 {
-                    foreach (var prov in sumbolsPunctuation)
+                    if (!startWord)
                     {
-                        if (prov == item && startWord == true && finishWord == false)
-                        {
-                            Console.Write(item);
+                        count++;
 
-                            finishWord = true;
-
-                            startWord = false;
-                        }
-
-                        else
-                            continue;
+                        Console.Write("\nСлово {0}: ", count);
                     }
-                }
 
-                else if (item == ' ' && startWord == true)
-                {
-                    finishWord = true;
-
-                    startWord = false;
-                }
-
-                else if (item >= 'a' || item <= 'z' && item != ' ')
-                {
-                    if (startWord == false)
-                    {
-                        if (count != 0)
-                        {
-                            Console.Write("\nСлово {0}: ", count);
-                        }
-                        else
-                        {
-                            count++;
-
-                            Console.Write("\nСлово {0}: ", count);
-                        }
-                    }
+                    Console.Write(symbol);
 
                     startWord = true;
 
                     finishWord = false;
-
-                    Console.Write(item);
                 }
 
+                else if (symbol < 'a' || symbol > 'z')
+                {
+                    if (symbolsPunctuation.Contains(symbol) && startWord && !finishWord)
+                    {
+                        Console.WriteLine(symbol);
+
+                        finishWord = true;
+
+                        startWord = false;
+                    }
+                    else
+                        continue;
+                }
                 else
                     continue;
             }
-
             return true;
-
-            //return NextStep.ChoiseSaveResult;
         }
-       
     }
 }
