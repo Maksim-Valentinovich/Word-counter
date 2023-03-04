@@ -1,21 +1,28 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Remoting.Messaging;
 using Word_counter;
 using Word_counter.Enums;
 using Word_counter.Enums2;
 
 namespace New_Structure
 {
-    static class Variables 
+     class Variables 
     {
-        static string text = string.Empty;
-        static int count = 0;
+        private static string text = string.Empty;
+
+        private static int count = 0;
+
+        public static int Count
+        {
+            get { return count; }
+            set { count = value; }
+        }
+
     }
 
     class Steps
     {
-        private string text = string.Empty;
+        private static string text = string.Empty;
 
         private string path = string.Empty;
 
@@ -94,8 +101,42 @@ namespace New_Structure
         /// <returns></returns>
         private NextStep Start()
         {
-            StartWordCounter start = new StartWordCounter();
-            return start.Start();
+            while (true)
+            {
+                Console.WriteLine("Выберите способ ввода текста: \n1 - Ввод в консоль \n2 - Считывание из файла");
+
+                string Choise = Console.ReadLine();
+
+                SourceInputText sourceinputtext;
+
+                /// Валидация выбора пользователя 
+                try
+                {
+                    sourceinputtext = (SourceInputText)Enum.Parse(typeof(SourceInputText), Choise);
+                }
+                catch (ArgumentException)
+                {
+                    Console.WriteLine("Неверный ввод!");
+
+                    break;
+                }
+
+                switch (sourceinputtext)
+                {
+                    case SourceInputText.ConsoleInput:
+
+                        return NextStep.WriteText;
+
+                    case SourceInputText.FileInput:
+
+                        return NextStep.ReadFile;
+
+                    default:
+                        Console.WriteLine("Выбор не соответствует заданному диапазону!");
+                        break;
+                }
+            }
+            return NextStep.Start;
         }
 
         /// <summary>
