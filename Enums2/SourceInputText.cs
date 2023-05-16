@@ -3,6 +3,7 @@
     public enum SourceInputText
     {
         ConsoleInput =1,
-        FileInput
+        FileInput,
+        DataInput
     }
 }

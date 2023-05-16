@@ -24,7 +24,6 @@ namespace New_Structure
 
             if (fileInf.Exists != true)
                 throw new FileNotFoundException();
-            
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace New_Structure
         {
             text = File.ReadAllText(path);
 
-            return true;
+            return true; // Возвращать True смысла нет! 
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace New_Structure
 
             fileSV.Create();
 
-            return true;
+            return true; // Возвращать True смысла нет! 
         }
 
         /// <summary>
@@ -66,7 +65,7 @@ namespace New_Structure
         {
                 string createText = "Lab1.cpp \nЛабораторная работа № 1 \nИспользование языка С# для математических расчетов " +
                                         "\nВычислить количество слов в нем и распечатать эти слова (по одному в строке) " +
-                                        "\nСтудент группы 001, Иванов Максим Валентинович, 2022 год" + "\nТекст: " + text + "\nКоличество слов в тексте = " + count;
+                                        "\nСтудент группы 001, Иванов Максим Валентинович, 2022 год" + "\nТекст: " + text + "\nКоличество слов в тексте = " + count; // хардкодить не нужно , вынести в отдельный файл! 
 
                 File.WriteAllText(path, createText);
         }
@@ -75,7 +74,7 @@ namespace New_Structure
         /// Создание файла исходных данных
         /// </summary>
         /// <returns></returns>
-        public void CreateFileInputData(string path, string text) 
+        public void CreateFileInputData(string path, string text) // смысла в такой реализации нет 
         {
             File.WriteAllText(path, text);
         }
